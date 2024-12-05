@@ -53,6 +53,58 @@
   }
 }
 
+  .chat-container {
+    width: 400px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-box {
+    flex: 1;
+    padding: 100px;
+    overflow-y: auto;
+    border-bottom: 1px solid #ddd;
+    height: 300px;
+}
+.messages {
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    background: #e1ffc7;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+}
+input[type="text"] {
+    border: none;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    border-radius: 0 0 8px 8px;
+}
+
+button {
+    border: none;
+    background: #28a745;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 0 0 8px 8px;
+}
+
+button:hover {
+    background: #218838;
+}
+  100% {
+    transform: translateX(0);
+  }
+}
+
 .movem {  
   animation: 1s ease-out 0s 1 slideInFromLeft;
 }
@@ -90,6 +142,20 @@ background-image: url('http://microexcel.tk/logoo.jpg');background-repeat: no-re
    <h1 style="font-weight:800;font-size:35px;">We are DitzzXploit Tools</h1> <button class="btn btn-info text-light" style="font-weight:bold;" onclick="Offers()">Tools<i class="fa fa-arrow-right"></i></button> 
   </div>
   <br>
+     <div class="card bg-light" style="width: 21rem;" id="ref">
+    <div class="card-body">
+      <p>Total Visitor</p><br>
+      <span id="visitorCount">0</span><br><br>
+      <p>Jumlah pengunjung Web</p>
+      </div>
+      </div><br>
+   <div class="card bg-light" style="width: 21rem;" id="ref">
+    <div class="card-body">
+  <p>Alamat IP Anda</p>
+  <span id="ipAddress">Mendapatkan IP...</span>
+    </div>
+    </div>
+    <br>
   <div class="social" style="background-image:url('https://img.freepik.com/free-vector/diwali-festival-patterned-background_53876-118874.jpg?w=740&amp;t=st=1663942253~exp=1663942853~hmac=2e980e7e4b4761799f1e01bebdc1f88b896395dc265484aefa1190e97b88b5d3');  
 background-attachment:fixed;
   background-size: 100% 100%;padding:10px;">
@@ -182,7 +248,22 @@ background-attachment:fixed;
     </div> 
    </center> 
   </div>
-  <br> 
+     <br>   
+   <div class="card bg-light" style="width:95%;margin-top:20px;"> 
+     <div class="card-body"> 
+      <h5 class="card-title">Live Chat</h5> 
+      <table class="table table-light table-striped table-hover"> 
+
+   <div class="chat-container">
+        <div class="chat-box" id="chatBox">
+            <div class="messages" id="messages"></div>
+        </div>
+        <input type="text" id="messageInput" placeholder="Ketik pesan Anda..." />
+        <button id="sendButton">Kirim</button>
+    </div>
+    </table>
+    </div></div></div>
+    <br>
   <center> 
    <br> 
    <div style="width:100%;height:100px;"> 
@@ -196,6 +277,45 @@ background-attachment:fixed;
   </center> 
   <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
   <script>
+   const messagesDiv = document.getElementById('messages');
+        const messageInput = document.getElementById('messageInput');
+        const sendButton = document.getElementById('sendButton');
+
+        sendButton.addEventListener('click', () => {
+            const messageText = messageInput.value.trim();
+            if (messageText) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+                messageElement.textContent = messageText;
+                messagesDiv.appendChild(messageElement);
+                messageInput.value = '';
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll ke bawah
+            }
+        });
+
+        messageInput.addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') {
+                sendButton.click();
+            }
+        });
+        
+    let visitorCount = localStorage.getItem('visitorCount') || 0;
+        visitorCount++;
+        localStorage.setItem('visitorCount', visitorCount);
+        
+        // Menampilkan jumlah pengunjung di halaman
+        document.getElementById('visitorCount').innerText = visitorCount;
+        
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('ipAddress').innerText = data.ip;
+            })
+            .catch(error => {
+                console.error('Error fetching IP address:', error);
+                document.getElementById('ipAddress').innerText = 'Gagal mendapatkan IP';
+            });
+   
  function telegram(){
   window.location="https://t.me/";
  }
